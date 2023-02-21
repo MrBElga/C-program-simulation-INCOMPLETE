@@ -78,6 +78,21 @@ void box(int lin1, int col1, int lin2, int col2){
                 linhaCol(lin2,i);
                 printf("%c",196);
             }
+            else if(i==4){
+                printf("C");
+                linhaCol(lin2,i);
+                printf("%c",196);
+            }
+            else if(i==5){
+                printf(":");
+                linhaCol(lin2,i);
+                printf("%c",196);
+            }
+            else if(i==6){
+                printf("/");
+                linhaCol(lin2,i);
+                printf("%c",196);
+            }
             else{
                 printf(" ");
                 linhaCol(lin2,i);
