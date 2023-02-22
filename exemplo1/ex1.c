@@ -1,5 +1,3 @@
-#include<stdio.h>
-
 void calcula(int x, int y, int *z)
 {
     *z=x + y;

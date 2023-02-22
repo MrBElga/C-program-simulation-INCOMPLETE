@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
-#include "tad.h"
 
 void linhaCol(int lin, int col);
 void box(int lin1, int col1, int lin2, int col2);
@@ -131,7 +130,9 @@ void box(int lin1, int col1, int lin2, int col2){
     textColor(BLUE,_DARKGRAY);
     printf("F9 ");  textColor(BLACK,_DARKGRAY);printf("- MEMORIA RAM\t");
     textColor(BLUE,_DARKGRAY);
-    printf("F10 "); textColor(BLACK,_DARKGRAY);printf("- TELA"); 
+    printf("F10 "); textColor(BLACK,_DARKGRAY);printf("- TELA\t"); 
+    textColor(BLUE,_DARKGRAY);
+    printf("ESC "); textColor(BLACK,_DARKGRAY);printf("- SAIR\t"); 
    
     //cantos
     linhaCol(lin1,col1);
@@ -144,6 +145,38 @@ void box(int lin1, int col1, int lin2, int col2){
     printf("%c",217);
 }
 
-void menu (int lin1, int col1, int qtd, int tecla){
 
+void imprime()
+{
+    char a[100];
+     int lin1=2, col1=3,i=3;
+	FILE *arqBin = fopen("ex1.dat","rb");
+    
+    fread(&a,sizeof(char),100,arqBin);
+    while (!feof(arqBin))
+	{	   
+        linhaCol(i,col1);
+    	printf("%s\n",a);
+        fread(&a,sizeof(char),100,arqBin);
+        i++;
+        Sleep(500);
+       
+    }  
+}
+
+void gera_arq_bin()
+{
+    char a[100];
+   
+	FILE *arq = fopen("ex1.c","r");
+    
+    FILE *arqBin = fopen("ex1.dat","wb");
+    fgets(a,100,arq);
+    while(!feof(arq))
+	{
+        fwrite(a,1,sizeof(a),arqBin);
+        fgets(a,100,arq);
+    }
+    fclose(arq);
+    fclose(arqBin);	
 }
