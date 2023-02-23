@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <windows.h>
 
+// Tela
+
 void linhaCol(int lin, int col);
 void box(int lin1, int col1, int lin2, int col2);
 void textColor(int letras, int fundo);
@@ -66,8 +68,7 @@ void box(int lin1, int col1, int lin2, int col2){
     tamcol=col2-col1;
 
     //setar tamanho da tela e titulo do CMD
-    system("MODE con cols=95 lines=35");
-    system("title Simulacao de programa em C");
+    
 
     for(i=col1;i<=col2;i++){ //linhas 
         if(i>=3 && i<=20){
@@ -122,18 +123,6 @@ void box(int lin1, int col1, int lin2, int col2){
         }
     }
     
-    linhaCol(i+1,col1+3);
-    textColor(BLUE,_DARKGRAY);
-    printf("F7 ");  textColor(BLACK,_DARKGRAY);printf("- ABRIR\t");
-    textColor(BLUE,_DARKGRAY);
-    printf("F8 ");  textColor(BLACK,_DARKGRAY);printf("- EXECUTAR\t"); 
-    textColor(BLUE,_DARKGRAY);
-    printf("F9 ");  textColor(BLACK,_DARKGRAY);printf("- MEMORIA RAM\t");
-    textColor(BLUE,_DARKGRAY);
-    printf("F10 "); textColor(BLACK,_DARKGRAY);printf("- TELA\t"); 
-    textColor(BLUE,_DARKGRAY);
-    printf("ESC "); textColor(BLACK,_DARKGRAY);printf("- SAIR\t"); 
-   
     //cantos
     linhaCol(lin1,col1);
     printf("%c",218);
@@ -145,12 +134,35 @@ void box(int lin1, int col1, int lin2, int col2){
     printf("%c",217);
 }
 
+void telainicial(){
+  //lin1, col1, lin2, col2
+    box(2,2,33,94);
+    linhaCol(34,4);
+    textColor(BLUE,_DARKGRAY);
+    printf("F7 ");  textColor(BLACK,_DARKGRAY);printf("- ABRIR\t");
+    textColor(BLUE,_DARKGRAY);
+    printf("F8 ");  textColor(BLACK,_DARKGRAY);printf("- EXECUTAR\t"); 
+    textColor(BLUE,_DARKGRAY);
+    printf("F9 ");  textColor(BLACK,_DARKGRAY);printf("- MEMORIA RAM\t");
+    textColor(BLUE,_DARKGRAY);
+    printf("F10 "); textColor(BLACK,_DARKGRAY);printf("- TELA\t"); 
+    textColor(BLUE,_DARKGRAY);
+    printf("ESC "); textColor(BLACK,_DARKGRAY);printf("- SAIR\t"); 
+}
 
-void imprime()
+//arquivo X -> arquivo binario
+
+void imprime(char arqName[])
 {
-    char a[100];
-     int lin1=2, col1=3,i=3;
-	FILE *arqBin = fopen("ex1.dat","rb");
+    char a[100],arqNameB[50];
+    int col1=3,i=3;
+    strcpy(arqNameB,arqName);
+    strcat(arqNameB,".dat");
+   
+
+    linhaCol(2,7);
+    printf("%s.c",arqName);
+	FILE *arqBin = fopen(arqNameB,"rb");
     
     fread(&a,sizeof(char),100,arqBin);
     while (!feof(arqBin))
@@ -164,19 +176,28 @@ void imprime()
     }  
 }
 
-void gera_arq_bin()
+void gera_arq_bin(char arqName[])
 {
-    char a[100];
-   
-	FILE *arq = fopen("ex1.c","r");
-    
-    FILE *arqBin = fopen("ex1.dat","wb");
-    fgets(a,100,arq);
-    while(!feof(arq))
-	{
-        fwrite(a,1,sizeof(a),arqBin);
+    char a[100],arqNameB[50],arqNameAux[50];
+
+    strcpy(arqNameB,arqName);
+    strcat(arqNameB,".dat");
+    strcpy(arqNameAux,arqName);
+    strcat(arqNameAux,".c");
+
+	FILE *arq = fopen(arqNameAux,"r");
+    if(arq)
+    {
+        FILE *arqBin = fopen(arqNameB,"wb");
+
         fgets(a,100,arq);
+        while(!feof(arq))
+        {
+            fwrite(a,1,sizeof(a),arqBin);
+            fgets(a,100,arq);
+        }
+        fclose(arq);
+        fclose(arqBin);	
+        imprime(arqName);
     }
-    fclose(arq);
-    fclose(arqBin);	
 }
