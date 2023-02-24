@@ -33,9 +33,9 @@ int main(){
                 scanf("%s",&arqName);
                 system("cls");
                 telainicial();
-             
+                //deve ser implementadp em uma lista de listas        
                 gera_arq_bin(arqName);
-              
+                    
             
             }
             else if(op==66){
