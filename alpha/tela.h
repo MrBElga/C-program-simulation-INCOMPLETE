@@ -3,7 +3,6 @@
 #include <windows.h>
 
 // Tela
-
 void linhaCol(int lin, int col);
 void box(int lin1, int col1, int lin2, int col2);
 void textColor(int letras, int fundo);
@@ -159,6 +158,7 @@ void imprime(char arqName[])
     strcpy(arqNameB,arqName);
     strcat(arqNameB,".dat");
    
+    telainicial();
 
     linhaCol(2,7);
     printf("%s.c",arqName);
@@ -171,12 +171,13 @@ void imprime(char arqName[])
     	printf("%s\n",a);
         fread(&a,sizeof(char),100,arqBin);
         i++;
-        Sleep(500);
+       // Sleep(500);
        
     }  
+
 }
 
-void gera_arq_bin(char arqName[])
+void gera_arq_bin(char arqName[],char *flag)
 {
     char a[100],arqNameB[50],arqNameAux[50];
 
@@ -198,6 +199,15 @@ void gera_arq_bin(char arqName[])
         }
         fclose(arq);
         fclose(arqBin);	
+        printf("cu");
+        system("cls");
         imprime(arqName);
+        *flag = '1';
     }
+    else{
+        linhaCol(8,25);
+        textColor(RED,_DARKGRAY);
+        printf("ERRO: verifique se o arquivo existe ou se eh um .C");
+        fclose(arq);
+    }   
 }

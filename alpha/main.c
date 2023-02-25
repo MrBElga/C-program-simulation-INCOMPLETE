@@ -15,7 +15,7 @@ int main(){
     telainicial();
   
     
-    char op, arqName[30];
+    char op, arqName[30],flag='0';
     do{
 
         fflush(stdin);
@@ -31,13 +31,23 @@ int main(){
                 box(5,21,7,93);
                 linhaCol(6,22);
                 scanf("%s",&arqName);
-                system("cls");
-                telainicial();
+
                 //deve ser implementadp em uma lista de listas        
-                gera_arq_bin(arqName);
-                    
-            
-            }
+                gera_arq_bin(arqName,&flag);
+
+                while(flag == '0'){
+                    printf("flag: %c",flag);
+                    linhaCol(6,22);
+                    printf("                             ");
+                    linhaCol(6,22);
+                    textColor(BLACK,_DARKGRAY);
+                    scanf("%s",&arqName);
+                  
+                    gera_arq_bin(arqName,&flag);
+                }
+                flag = '0';
+               
+            }    
             else if(op==66){
                 system("cls");
                 telainicial();
