@@ -7,7 +7,7 @@
 
 
 int main(){
-    
+    //define tamanho do prompt e o titulo do prompt
     system("MODE con cols=95 lines=35");
     system("title Simulacao de programa em C");
     textColor(BLACK,_DARKGRAY);
@@ -30,19 +30,33 @@ int main(){
                 //lin1, col1, lin2, col2
                 box(5,21,7,93);
                 linhaCol(6,22);
-                scanf("%s",&arqName);
+                fflush(stdin);
+                gets(arqName);
+
+                while(strcmp(arqName,"")){
+                    linhaCol(6,22);    
+                    fflush(stdin);
+                    gets(arqName);
+                }
 
                 //deve ser implementadp em uma lista de listas        
                 gera_arq_bin(arqName,&flag);
 
                 while(flag == '0'){
-                    printf("flag: %c",flag);
+
                     linhaCol(6,22);
-                    printf("                             ");
-                    linhaCol(6,22);
+                    printf("                                                                       ");
+                    linhaCol(6,22)  ;
                     textColor(BLACK,_DARKGRAY);
-                    scanf("%s",&arqName);
-                  
+                    
+                    fflush(stdin);
+                    gets(arqName);
+                    
+                    while(strcmp(arqName,"")){
+                        linhaCol(6,22);  
+                        fflush(stdin);
+                        gets(arqName);
+                    }
                     gera_arq_bin(arqName,&flag);
                 }
                 flag = '0';

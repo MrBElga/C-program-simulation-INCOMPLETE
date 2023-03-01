@@ -175,6 +175,7 @@ void imprime(char arqName[])
        
     }  
 
+
 }
 
 void gera_arq_bin(char arqName[],char *flag)
@@ -186,28 +187,29 @@ void gera_arq_bin(char arqName[],char *flag)
     strcpy(arqNameAux,arqName);
     strcat(arqNameAux,".c");
 
-	FILE *arq = fopen(arqNameAux,"r");
-    if(arq)
-    {
-        FILE *arqBin = fopen(arqNameB,"wb");
-
-        fgets(a,100,arq);
-        while(!feof(arq))
+        FILE *arq = fopen(arqNameAux,"r");
+        if(arq)
         {
-            fwrite(a,1,sizeof(a),arqBin);
+            FILE *arqBin = fopen(arqNameB,"wb");
+
             fgets(a,100,arq);
+            while(!feof(arq))
+            {
+                fwrite(a,1,sizeof(a),arqBin);
+                fgets(a,100,arq);
+            }
+            fclose(arq);
+            fclose(arqBin);	
+            printf("cu");
+            system("cls");
+            imprime(arqName);
+            *flag = '1';
         }
-        fclose(arq);
-        fclose(arqBin);	
-        printf("cu");
-        system("cls");
-        imprime(arqName);
-        *flag = '1';
-    }
-    else{
-        linhaCol(8,25);
-        textColor(RED,_DARKGRAY);
-        printf("ERRO: verifique se o arquivo existe ou se eh um .C");
-        fclose(arq);
-    }   
+        else{
+            linhaCol(8,25);
+            textColor(RED,_DARKGRAY);
+            printf("ERRO: verifique se o arquivo existe ou se eh um .C");
+            fclose(arq);
+        }  
+    
 }
