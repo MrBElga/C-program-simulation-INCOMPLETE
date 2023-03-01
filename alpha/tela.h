@@ -186,10 +186,11 @@ void gera_arq_bin(char arqName[],char *flag)
     strcat(arqNameB,".dat");
     strcpy(arqNameAux,arqName);
     strcat(arqNameAux,".c");
-
+    printf("entrou");
         FILE *arq = fopen(arqNameAux,"r");
         if(arq)
         {
+            printf("ok");
             FILE *arqBin = fopen(arqNameB,"wb");
 
             fgets(a,100,arq);

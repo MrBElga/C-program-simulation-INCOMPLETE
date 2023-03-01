@@ -30,12 +30,10 @@ int main(){
                 //lin1, col1, lin2, col2
                 box(5,21,7,93);
                 linhaCol(6,22);
-                fflush(stdin);
                 gets(arqName);
 
-                while(strcmp(arqName,"")){
-                    linhaCol(6,22);    
-                    fflush(stdin);
+                while(strcmp(arqName,"")==0){
+                    linhaCol(6,22); 
                     gets(arqName);
                 }
 
@@ -48,13 +46,12 @@ int main(){
                     printf("                                                                       ");
                     linhaCol(6,22)  ;
                     textColor(BLACK,_DARKGRAY);
-                    
-                    fflush(stdin);
+
+               
                     gets(arqName);
                     
-                    while(strcmp(arqName,"")){
+                    while(strcmp(arqName,"")==0){
                         linhaCol(6,22);  
-                        fflush(stdin);
                         gets(arqName);
                     }
                     gera_arq_bin(arqName,&flag);
