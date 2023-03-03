@@ -63,7 +63,10 @@ int main(){
                 system("cls");
                 telainicial();
             }
-            else if(op==67){    
+            else if(op==67){  
+                system("cls");  
+                telaRam();
+               
 
                 
             }  

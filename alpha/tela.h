@@ -62,9 +62,7 @@ void linhaCol(int lin, int col){
 }
 
 void box(int lin1, int col1, int lin2, int col2){
-    int i=0, j=0, tamlin=0, tamcol=0;
-    tamlin=lin2-lin1;
-    tamcol=col2-col1;
+    int i=0, j=0;
 
     //setar tamanho da tela e titulo do CMD
     
@@ -165,7 +163,7 @@ void imprime(char arqName[])
 	FILE *arqBin = fopen(arqNameB,"rb");
     
     fread(&a,sizeof(char),100,arqBin);
-    while (!feof(arqBin))
+    while (!feof(arqBin) && i!=33)
 	{	   
         linhaCol(i,col1);
     	printf("%s\n",a);
@@ -174,23 +172,47 @@ void imprime(char arqName[])
        // Sleep(500);
        
     }  
+}
 
+void telaRam(){
+    int i=0,j=0;
+    box(2,2,33,94);
+    linhaCol(4,10),
+    printf("RAM");
+    //lin1, col1, lin2, col2
+    box(6,3,32,20);
+    for(j=6; j<32; j=j+2){   
+        for(i=4; i<20; i++){   
 
+            if(i==4 && j>6){
+                linhaCol(j,i-1);
+                printf("%c",195);
+            }
+
+            linhaCol(j,i);
+            printf("%c",196);   
+        }
+        if(j>6){
+            linhaCol(j,i);
+            printf("%c",180);
+        }
+        //197 kreuz 
+    }
+
+    //duplicar coluna para direita, tabela de variaveis e valores(int, float e endereço)
 }
 
 void gera_arq_bin(char arqName[],char *flag)
-{
+{ 
     char a[100],arqNameB[50],arqNameAux[50];
 
     strcpy(arqNameB,arqName);
     strcat(arqNameB,".dat");
     strcpy(arqNameAux,arqName);
     strcat(arqNameAux,".c");
-    printf("entrou");
         FILE *arq = fopen(arqNameAux,"r");
         if(arq)
         {
-            printf("ok");
             FILE *arqBin = fopen(arqNameB,"wb");
 
             fgets(a,100,arq);
@@ -200,8 +222,7 @@ void gera_arq_bin(char arqName[],char *flag)
                 fgets(a,100,arq);
             }
             fclose(arq);
-            fclose(arqBin);	
-            printf("cu");
+            fclose(arqBin);
             system("cls");
             imprime(arqName);
             *flag = '1';
