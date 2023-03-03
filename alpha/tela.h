@@ -68,41 +68,11 @@ void box(int lin1, int col1, int lin2, int col2){
     
 
     for(i=col1;i<=col2;i++){ //linhas 
-        if(i>=3 && i<=20){
-            linhaCol(lin1,i);
-            if(i==3 || i==20){
-                printf("%c",179);
-                linhaCol(lin2,i);
-                printf("%c",196);
-            }
-            else if(i==4){
-                printf("C");
-                linhaCol(lin2,i);
-                printf("%c",196);
-            }
-            else if(i==5){
-                printf(":");
-                linhaCol(lin2,i);
-                printf("%c",196);
-            }
-            else if(i==6){
-                printf("/");
-                linhaCol(lin2,i);
-                printf("%c",196);
-            }
-            else{
-                printf(" ");
-                linhaCol(lin2,i);
-                printf("%c",196);
-            }     
-        }
-        else{
-            linhaCol(lin1,i);
-            printf("%c",196);
-            linhaCol(lin2,i);
-            printf("%c",196);
-        }
-       
+        linhaCol(lin1,i);
+        printf("%c",196);
+        linhaCol(lin2,i);
+        printf("%c",196);
+  
     }
 
     for(i=lin1;i<=lin2;i++){ //colunas
@@ -158,8 +128,8 @@ void imprime(char arqName[])
    
     telainicial();
 
-    linhaCol(2,7);
-    printf("%s.c",arqName);
+    linhaCol(2,3);
+    printf("%c%s%c",179,arqName,179);
 	FILE *arqBin = fopen(arqNameB,"rb");
     
     fread(&a,sizeof(char),100,arqBin);
@@ -204,34 +174,33 @@ void telaRam(){
 
 void gera_arq_bin(char arqName[],char *flag)
 { 
-    char a[100],arqNameB[50],arqNameAux[50];
+    char a[100],arqNameB[50];
 
     strcpy(arqNameB,arqName);
     strcat(arqNameB,".dat");
-    strcpy(arqNameAux,arqName);
-    strcat(arqNameAux,".c");
-        FILE *arq = fopen(arqNameAux,"r");
-        if(arq)
-        {
-            FILE *arqBin = fopen(arqNameB,"wb");
+    FILE *arq = fopen(arqName,"r");
+    
+    if(arq)
+    {
+    	FILE *arqBin = fopen(arqNameB,"wb");
 
+        fgets(a,100,arq);
+        while(!feof(arq))
+        {
+            fwrite(a,1,sizeof(a),arqBin);
             fgets(a,100,arq);
-            while(!feof(arq))
-            {
-                fwrite(a,1,sizeof(a),arqBin);
-                fgets(a,100,arq);
-            }
-            fclose(arq);
-            fclose(arqBin);
-            system("cls");
-            imprime(arqName);
-            *flag = '1';
         }
-        else{
-            linhaCol(8,25);
-            textColor(RED,_DARKGRAY);
-            printf("ERRO: verifique se o arquivo existe ou se eh um .C");
-            fclose(arq);
-        }  
+        fclose(arq);
+        fclose(arqBin);
+        system("cls");
+        imprime(arqName);
+        *flag = '1';
+    }
+    else{
+        linhaCol(8,25);
+        textColor(RED,_DARKGRAY);
+        printf("ERRO: verifique se o arquivo existe ou se eh um .C");
+        fclose(arq);
+    }  
     
 }

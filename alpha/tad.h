@@ -9,6 +9,8 @@ struct TpListaC{
 };
 typedef struct TplistaC Lista;
 
+
+
 struct TpPilhaRam
 {
     int Endereco, valotI;
