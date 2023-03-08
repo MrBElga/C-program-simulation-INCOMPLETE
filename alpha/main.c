@@ -3,7 +3,6 @@
 #include <string.h>
 #include <windows.h>
 #include "tad.h"
-#include "tela.h"
 
 
 int main(){
