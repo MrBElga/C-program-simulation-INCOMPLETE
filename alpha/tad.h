@@ -205,15 +205,15 @@ void gera_arq_bin(char arqName[],char *flag)
 //estruturas
 struct TpListaC{
     char palav[50];
-    struct TpLista *prox;
+    struct TpLista *proxC,*antC;
 
 };
-typedef struct TplistaC Lista;
+typedef struct TpListaC Coluna;
 
 struct Tplinha
 {
-    Lista *inicio;
-    struct Tplinha *prox;
+    struct TpListaC *inicio;
+    struct Tplinha *prox,*ant;
 };
 typedef struct Tplinha Linha;
 
@@ -237,31 +237,30 @@ typedef struct TpListaPont ListaP;
 
 
 // iniciar lista
-void initListaC(Lista **L){
-    *L->prox = NULL
-    
+void initListaC(Coluna **L){
+    *L = NULL;
 }
 
 void initListaL(Linha **L){
-    *L->inicio = prox = NULL;
+    *L = NULL;
 }
 
 //vazia
 
-int isEmpetyC(Lista *inicio){
+int isEmpetyC(Coluna *inicio){
 	return inicio == NULL;
 }
 
-int isEmpetyL(Linhas *inicio){
+int isEmpetyL(Linha *inicio){
     return inicio == NULL;
 }
 
 
 //nova caixa
 
-void criaNovaC(Lista **col,char info[]){
-    Lista *novo = (Lista*) malloc (sizeof(Lista));
-    novo->prox = NULL;
+void criarNovaC(Coluna **col,char info[]){
+    Coluna *novo = (Coluna*) malloc (sizeof(Coluna));
+    novo->proxC = novo->antC = NULL;
     strcpy(novo->palav,info);
     *col = novo;
 }
@@ -269,61 +268,21 @@ void criaNovaC(Lista **col,char info[]){
 
 void criarNovaL(Linha **lin){
      Linha *novo = (Linha*) malloc (sizeof(Linha));
-     novo->inicio = novo->prox = NULL;
+     novo->prox = novo->ant = NULL;
+     novo->inicio = NULL;
      *lin = novo;
 }
 
 //gerar lista de lista com o codigo
-void gerarLista(Lista **col, Linha **lin, char NomeArq[],char *flag){
+void gerarLista(Coluna **col, Linha **lin, char NomeArq[]){
     int i=0;
     char aux, auxs[50];
-    Lista *auxPC;
-    Linha *auxPL;
 
     FILE *arq = fopen(NomeArq,"r");
 
-    if(arq)
-    {
-        criarNovaL(&auxPL);
-        *lin=auxPL;
-        aux = fgetc(arq);
-        while(!EOF(arq)) 
-        {
-            if(aux == 32 || (aux >=33 && aux <= 62) || (aux >= 65 ¬¬ aux <= 94) || (aux >= 97 && aux >= 125))
-            {
-                if(aux!=10)
-                {
-                    
-                    criarNovaC(&auxPC);
+   
 
-                }   
-                else
-                {
-                    criarNovaL(&auxPL);
-                    *lin->prox = auxPL; 
-                }
-
-            }
-            else
-            {
-                aux[i] = aux;
-                i++;
-            }
-
-            aux = fgetc(arq);
-        }
-        
-
-        flag = '1';
-    }
-    else
-    {
-        linhaCol(8,25);
-        textColor(RED,_DARKGRAY);
-        printf("ERRO: verifique se o arquivo existe ou se eh um .C");
-        fclose(arq);
-    }
-
+    fclose(arq);
 }
 
 

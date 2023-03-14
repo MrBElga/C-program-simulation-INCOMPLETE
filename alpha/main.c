@@ -12,11 +12,15 @@ int main(){
     textColor(BLACK,_DARKGRAY);
   
     telainicial();
-  
     
     char op, arqName[30],flag='0';
-    do{
+    Coluna *Col;
+    Linha *Lin;
 
+    initListaC(&Col);
+    initListaL(&Lin);
+
+    do{
         fflush(stdin);
         op=getche();
      
@@ -29,32 +33,48 @@ int main(){
                 //lin1, col1, lin2, col2
                 box(5,21,7,93);
                 linhaCol(6,22);
+                fflush(stdin);
                 gets(arqName);
 
-                while(strcmp(arqName,"")==0){
+                while(strcmp(arqName,"")==0)
+                {
                     linhaCol(6,22); 
+                    fflush(stdin);
                     gets(arqName);
                 }
 
-                //deve ser implementadp em uma lista de listas        
-                gera_arq_bin(arqName,&flag);
-
-                while(flag == '0'){
-
-                    linhaCol(6,22);
-                    printf("                                                                       ");
-                    linhaCol(6,22)  ;
-                    textColor(BLACK,_DARKGRAY);
-
-               
-                    gets(arqName);
-                    
-                    while(strcmp(arqName,"")==0){
-                        linhaCol(6,22);  
-                        gets(arqName);
+                //deve ser implementadp em uma lista de listas                   
+                while(flag != '1')
+                {
+                    FILE *arq = fopen(arqName,"r");
+                    if(arq)
+                    {
+                        flag = '1';
+                  
                     }
-                    gera_arq_bin(arqName,&flag);
+                    else
+                    {
+                        linhaCol(8,25);
+                        textColor(RED,_DARKGRAY);
+                        printf("ERRO: verifique se o arquivo existe ou se eh um .C");
+                        linhaCol(6,22);
+                        printf("                                                                       ");
+                        linhaCol(6,22)  ;
+                        textColor(BLACK,_DARKGRAY);
+
+                        fflush(stdin);
+                        gets(arqName);
+                        
+                        while(strcmp(arqName,"")==0)
+                        {
+                            linhaCol(6,22);  
+                            gets(arqName);
+                        }
+                    }
+                    fclose(arq);
                 }
+                gerarLista(&Col, &Lin, arqName);
+                telainicial();
                 flag = '0';
                
             }    
