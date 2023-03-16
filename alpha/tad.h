@@ -169,38 +169,38 @@ void telaRam(){
     //duplicar coluna para direita, tabela de variaveis e valores(int, float e endereço)
 }
 
-void gera_arq_bin(char arqName[],char *flag)
-{ 
-    char a[100],arqNameB[50];
+//void gera_arq_bin(char arqName[],char *flag)
+//{ 
+//    char a[100],arqNameB[50];
 
-    strcpy(arqNameB,arqName);
-    strcat(arqNameB,".dat");
-    FILE *arq = fopen(arqName,"r");
-    
-    if(arq)
-    {
-    	FILE *arqBin = fopen(arqNameB,"wb");
+//    strcpy(arqNameB,arqName);
+//    strcat(arqNameB,".dat");
+//    FILE *arq = fopen(arqName,"r");
+//    
+//    if(arq)
+//    {
+//    	FILE *arqBin = fopen(arqNameB,"wb");
 
-        fgets(a,100,arq);
-        while(!feof(arq))
-        {
-            fwrite(a,1,sizeof(a),arqBin);
-            fgets(a,100,arq);
-        }
-        fclose(arq);
-        fclose(arqBin);
-        system("cls");
-        imprime(arqName);
-        *flag = '1';
-    }
-    else{
-        linhaCol(8,25);
-        textColor(RED,_DARKGRAY);
-        printf("ERRO: verifique se o arquivo existe ou se eh um .C");
-        fclose(arq);
-    }  
-    
-}
+//        fgets(a,100,arq);
+//        while(!feof(arq))
+//        {
+//            fwrite(a,1,sizeof(a),arqBin);
+//            fgets(a,100,arq);
+//        }
+//        fclose(arq);
+//        fclose(arqBin);
+//        system("cls");
+//        imprime(arqName);
+//        *flag = '1';
+//    }
+//    else{
+//        linhaCol(8,25);
+//        textColor(RED,_DARKGRAY);
+//        printf("ERRO: verifique se o arquivo existe ou se eh um .C");
+//        fclose(arq);
+//    }  
+//    
+//}
 
 //estruturas
 struct TpListaC{
