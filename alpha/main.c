@@ -48,7 +48,7 @@ int main()
             while (flag != '1')
             {
                 FILE *arq = fopen(arqName, "r");
-                if (arq)
+                if(arq)
                 {
                     flag = '1';
                 }
@@ -61,21 +61,26 @@ int main()
                     printf("                                                                       ");
                     linhaCol(6, 22);
                     textColor(BLACK, _DARKGRAY);
-
+                    
                     fflush(stdin);
                     gets(arqName);
 
                     while (strcmp(arqName, "") == 0)
-                    {
-                        linhaCol(6, 22);
-                        gets(arqName);
-                    }
+		            {
+		                linhaCol(6, 22);
+		                fflush(stdin);
+		                gets(arqName);
+		            }
                 }
                 fclose(arq);
             }
-            gerarLista(&Col, &Lin, arqName);
-            telainicial();
+           gerarLista(&Col, &Lin, arqName);
+           system("cls");
+           telainicial();
+           exibeL(Lin);
+           
             flag = '0';
+            
         }
         else if (op == 66)
         {

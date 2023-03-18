@@ -230,13 +230,15 @@ void gera_arq_bin(char arqName[], char *flag)
 struct TpListaC
 {
     char palav[50];
-    struct TpLista *proxC, *antC;
+    struct TpListaC *proxC, *antC;
 };
 typedef struct TpListaC Coluna;
 
 struct Tplinha
 {
     struct TpListaC *inicio;
+    char tipo;
+    char lin;
     struct Tplinha *prox, *ant;
 };
 typedef struct Tplinha Linha;
@@ -280,29 +282,114 @@ int isEmpetyL(Linha *inicio)
 
 // nova caixa
 
-void criarNovaC(Coluna **col, char info[])
+Coluna *criarNovaC(char info[])
 {
     Coluna *novo = (Coluna *)malloc(sizeof(Coluna));
     novo->proxC = novo->antC = NULL;
     strcpy(novo->palav, info);
-    *col = novo;
+    return novo;
 }
 
-void criarNovaL(Linha **lin)
+Linha *criarNovaL()
 {
     Linha *novo = (Linha *)malloc(sizeof(Linha));
     novo->prox = novo->ant = NULL;
     novo->inicio = NULL;
-    *lin = novo;
+    return novo;
 }
 
 // gerar lista de lista com o codigo
 void gerarLista(Coluna **col, Linha **lin, char NomeArq[])
 {
-    int i = 0;
-    char aux, auxs[50];
-
+    int i = 0,j = 0;
+    char auxs[90], aux[30] = {},F,L;
+    
+    Linha *nova,*auxL;
+    Coluna *novaC,*auxC;
+    
     FILE *arq = fopen(NomeArq, "r");
 
+    fgets(auxs,90,arq);
+    while(!feof(arq))
+    {
+        nova = (Linha*)malloc(sizeof(Linha));
+        nova = criarNovaL();
+        if((*lin) == NULL)
+        {
+            (*lin) = nova;   
+        }
+        else
+        {
+            auxL = (*lin);
+            while(auxL->prox!=NULL)
+                auxL = auxL->prox;
+             
+            nova->ant = auxL;
+            auxL->prox = nova;
+           
+            (*lin) = auxL;
+        }
+        while(i != strlen(auxs))
+        {
+            if(auxs[i] >= 33 && auxs[i] <= 126)
+            {
+                if((auxs[i] != 32))
+                {
+                    aux[j] = auxs[i];
+                    j++;
+                }
+            }
+            else 
+            {
+                    novaC = (Coluna*)malloc(sizeof(Coluna));
+                    novaC = criarNovaC(aux);
+                    if((*col) == NULL)
+                    {
+                        (*col) = novaC;
+                    }
+                    else
+                    {
+                        auxC = (*col);
+                        while(auxC->proxC != NULL)
+                            auxC = auxC->proxC;
+                            
+                        novaC->antC = auxC;     
+                        auxC->proxC = novaC;
+                       
+                        (*col) = auxC;
+                    }
+                    for(;j>=0;j--)
+                        aux[j] = '\0';
+                    j=0;
+            } 
+            i++;           
+        }
+        (*lin)->inicio = (*col);
+  
+        for(;j>=0;j--)
+            aux[j] = '\0';
+        j=0;
+        i=0;
+
+        fgets(auxs,90,arq);
+    }
     fclose(arq);
+}
+
+void exibeL(Linha *L)
+{
+    int  i = 3 ,j = 3; 
+  
+    while(L->prox != NULL)
+    {  
+        linhaCol(i, j);
+    
+        while(L->inicio->proxC != NULL)
+        {  
+            printf("%s ",L->inicio->palav);
+            L->inicio = L->inicio->proxC;
+        }
+        i++;
+        L = L->prox;
+    }
 }

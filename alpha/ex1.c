@@ -10,7 +10,7 @@ int main()
     int a,b,c;
     
     a=5;
-    b=8;
+    b=5;
     c=3;
 
     calcula(a,b,&c);
