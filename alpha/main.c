@@ -14,6 +14,7 @@ int main()
     telainicial();
 
     char op, arqName[30], flag = '0';
+    int i = 3 ,j = 3;
     Coluna *Col;
     Linha *Lin;
 
@@ -74,13 +75,14 @@ int main()
                 }
                 fclose(arq);
             }
-           gerarLista(&Col, &Lin, arqName);
+           gerarLista( &Lin,&Col, arqName);
+          
            system("cls");
            telainicial();
-           exibeL(Lin);
+           exibeEnter(Lin,i);
            
             flag = '0';
-            
+            getche();
         }
         else if (op == 66)
         {
@@ -95,6 +97,13 @@ int main()
         else if (op == 68)
         {
         }
+        else if(op == 13 && Lin != NULL)
+        {
+        	i++;
+        
+        	exibeEnter(Lin, i);
+        	
+		}
 
     } while (op != 27);
 

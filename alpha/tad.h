@@ -192,42 +192,6 @@ void telaRam()
 
     // duplicar coluna para direita, tabela de variaveis e valores(int, float e endereço)
 }
-
-
-//void gera_arq_bin(char arqName[],char *flag)
-//{ 
-//    char a[100],arqNameB[50];
-
-//    strcpy(arqNameB,arqName);
-//    strcat(arqNameB,".dat");
-//    FILE *arq = fopen(arqName,"r");
-//    
-//    if(arq)
-//    {
-//    	FILE *arqBin = fopen(arqNameB,"wb");
-
-//        fgets(a,100,arq);
-//        while(!feof(arq))
-//        {
-//            fwrite(a,1,sizeof(a),arqBin);
-//            fgets(a,100,arq);
-//        }
-//        fclose(arq);
-//        fclose(arqBin);
-//        system("cls");
-//        imprime(arqName);
-//        *flag = '1';
-//    }
-//    else{
-//        linhaCol(8,25);
-//        textColor(RED,_DARKGRAY);
-//        printf("ERRO: verifique se o arquivo existe ou se eh um .C");
-//        fclose(arq);
-//    }  
-//    
-//}
->>>>>>> adde7126eb483d357586231cb37c4cc17019b053
-
 // estruturas
 struct TpListaC
 {
@@ -239,31 +203,15 @@ typedef struct TpListaC Coluna;
 struct Tplinha
 {
     struct TpListaC *inicio;
-    char tipo;
-    char lin;
     struct Tplinha *prox, *ant;
 };
 typedef struct Tplinha Linha;
 
-struct TpPilhaRam
-{
-    int Endereco, valotI;
-    char variavel;
-    float valorF;
-    struct TpPilhaRam *prox;
-};
-typedef struct TpPilhaRam Pilha;
-
-struct TpListaPont
-{
-};
-typedef struct TpListaPont ListaP;
-
 // iniciar lista
-void initListaC(Coluna **L)
+void initListaC(Coluna **C)
 {
-    *L = NULL;
-}
+    *C = NULL;
+}	
 
 void initListaL(Linha **L)
 {
@@ -284,95 +232,88 @@ int isEmpetyL(Linha *inicio)
 
 // nova caixa
 
-Coluna *criarNovaC(char info[])
-{
-    Coluna *novo = (Coluna *)malloc(sizeof(Coluna));
-    novo->proxC = novo->antC = NULL;
-    strcpy(novo->palav, info);
-    return novo;
-}
 
-Linha *criarNovaL()
+
+
+void listaCol(Coluna **col, char aux[90])
 {
-    Linha *novo = (Linha *)malloc(sizeof(Linha));
-    novo->prox = novo->ant = NULL;
-    novo->inicio = NULL;
-    return novo;
+		Coluna *auxC, *novo = (Coluna *)malloc(sizeof(Coluna));
+			    novo->proxC = novo->antC = NULL;
+			    strcpy(novo->palav, aux);
+			    if(*col == NULL)
+				{
+			    	*col = novo;  
+			    	//(*lin)->inicio = *col;
+					         
+			    }
+			    else
+			   	{
+			   	 	auxC = *col;
+			        while(auxC->proxC != NULL)
+			            auxC = auxC->proxC;
+			             
+			     	auxC->proxC = novo;
+			    	novo->antC = auxC;
+    			}
+    
+          
 }
 
 // gerar lista de lista com o codigo
-void gerarLista(Coluna **col, Linha **lin, char NomeArq[])
+void gerarLista(Linha **lin,Coluna **col,char NomeArq[])
 {
     int i = 0,j = 0;
-    char auxs[90], aux[30] = {},F,L;
-    
+    char auxs[90]={}, aux[90]={};
+
     Linha *nova,*auxL;
-    Coluna *novaC,*auxC;
     
     FILE *arq = fopen(NomeArq, "r");
 
     fgets(auxs,90,arq);
     while(!feof(arq))
     {
-        nova = (Linha*)malloc(sizeof(Linha));
-        nova = criarNovaL();
-        if((*lin) == NULL)
+        Linha *nova = (Linha *)malloc(sizeof(Linha));
+        nova->prox = nova->ant = NULL;
+        nova->inicio = NULL;
+
+        if(*lin == NULL)
         {
-            (*lin) = nova;   
+            *lin = nova;   
+           
         }
         else
         {
-            auxL = (*lin);
+            auxL = *lin;
             while(auxL->prox!=NULL)
                 auxL = auxL->prox;
-             
+            auxL->prox = nova;;
             nova->ant = auxL;
-            auxL->prox = nova;
-           
-            (*lin) = auxL;
         }
-        while(i != strlen(auxs))
-        {
+      
+		while(i != strlen(auxs))
+	    {
             if(auxs[i] >= 33 && auxs[i] <= 126)
             {
-                if((auxs[i] != 32))
-                {
-                    aux[j] = auxs[i];
-                    j++;
-                }
+                aux[j] = auxs[i];
+                j++;
             }
-            else 
-            {
-                    novaC = (Coluna*)malloc(sizeof(Coluna));
-                    novaC = criarNovaC(aux);
-                    if((*col) == NULL)
-                    {
-                        (*col) = novaC;
-                    }
-                    else
-                    {
-                        auxC = (*col);
-                        while(auxC->proxC != NULL)
-                            auxC = auxC->proxC;
-                            
-                        novaC->antC = auxC;     
-                        auxC->proxC = novaC;
-                       
-                        (*col) = auxC;
-                    }
-                    for(;j>=0;j--)
-                        aux[j] = '\0';
-                    j=0;
-            } 
-            i++;           
-        }
-        (*lin)->inicio = (*col);
-  
+			else
+			{
+			 	listaCol(&nova->inicio,aux);
+				for(;j>=0;j--)
+                	aux[j] = '\0';
+               	j=0;
+            }
+			 
+			
+            i++;
+     	}
+                   
         for(;j>=0;j--)
             aux[j] = '\0';
         j=0;
         i=0;
-
+  
         fgets(auxs,90,arq);
     }
     fclose(arq);
@@ -380,18 +321,58 @@ void gerarLista(Coluna **col, Linha **lin, char NomeArq[])
 
 void exibeL(Linha *L)
 {
-    int  i = 3 ,j = 3; 
-  
-    while(L->prox != NULL)
+    int  i = 3, j = 3; 
+    Coluna *aux;
+    while(L != NULL)
     {  
+        
+        aux = L->inicio;
+       
         linhaCol(i, j);
-    
-        while(L->inicio->proxC != NULL)
+        while(aux != NULL)
         {  
-            printf("%s ",L->inicio->palav);
-            L->inicio = L->inicio->proxC;
+            printf("%s ",aux->palav);
+           aux = aux->proxC;
         }
-        i++;
+       	i++;
+        L = L->prox;
+    }
+}
+
+void exibeEnter(Linha *L,int pos)
+{
+    int  i = 3, j = 3 , lin, col; 
+    Coluna *aux;
+    
+    
+	telainicial();
+    
+ 
+    while(L != NULL)
+    {  
+        aux = L->inicio;
+        if(i==pos)
+		{
+        	textColor(WHITE, _CYAN);
+		    for (col = j; col < 94; col++)
+	    	{
+	            linhaCol(i,col);
+		        printf(" ");
+	        }
+		}
+        else
+        	textColor(BLACK, _DARKGRAY);
+        	
+        while(aux != NULL)
+        {  
+           linhaCol(i,j);
+	       printf("%s",aux->palav);
+	          j = j + strlen(aux->palav)+1;
+           aux = aux->proxC;
+        
+        }
+       	i++;
+       	j=3;
         L = L->prox;
     }
 }

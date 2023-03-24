@@ -20,3 +20,4 @@ int main()
     calcula(b,b+b,&a);
     printf("%d %d %d\n",a,b,c);
 }
+
