@@ -14,9 +14,9 @@ int main()
     telainicial();
 
     char op, arqName[30], flag = '0';
-    int i = 3 ,j = 3;
+    int i = 3,j = 3,contlin=0,cont=0;
     Coluna *Col;
-    Linha *Lin;
+    Linha *Lin, *aux;
 
     initListaC(&Col);
     initListaL(&Lin);
@@ -75,14 +75,25 @@ int main()
                 }
                 fclose(arq);
             }
-           gerarLista( &Lin,&Col, arqName);
+           	gerarLista(&Lin,&Col, arqName);
           
-           system("cls");
-           telainicial();
-           exibeEnter(Lin,i);
+           	system("cls");
+           	telainicial();
            
-            flag = '0';
-            getche();
+         
+           	i = localizaMain(Lin)+3;
+           	exibeEnter(Lin,i);
+        	flag = '0';
+            aux = Lin;
+            
+            while(aux->prox!=NULL)
+            {
+            	contlin = aux->linha;
+            	aux=aux->prox;
+            	
+			}
+			cont = i;
+		
         }
         else if (op == 66)
         {
@@ -97,15 +108,22 @@ int main()
         else if (op == 68)
         {
         }
-        else if(op == 13 && Lin != NULL)
+        else if(op == 13 && Lin != NULL &&  contlin >= cont)
         {
-        	i++;
         
-        	exibeEnter(Lin, i);
+				
+        	cont++;
+        	exibeEnter(Lin, cont+3);
+        	
         	
 		}
+        else if(op == 13 && Lin != NULL && cont >= contlin)
+        {
+
+        }
 
     } while (op != 27);
+    
 
     system("cls");
     printf("programa finalizado: ");

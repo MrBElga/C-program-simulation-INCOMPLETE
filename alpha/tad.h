@@ -203,9 +203,18 @@ typedef struct TpListaC Coluna;
 struct Tplinha
 {
     struct TpListaC *inicio;
+    int linha;
     struct Tplinha *prox, *ant;
 };
 typedef struct Tplinha Linha;
+
+struct TpPilhaVarEnd
+{
+    int enderecos;
+    struct TpPilhaVarEnd *prox,*ant;
+};
+typedef struct TpPilhaVarEnd pilha;
+
 
 // iniciar lista
 void initListaC(Coluna **C)
@@ -262,7 +271,7 @@ void listaCol(Coluna **col, char aux[90])
 // gerar lista de lista com o codigo
 void gerarLista(Linha **lin,Coluna **col,char NomeArq[])
 {
-    int i = 0,j = 0;
+    int i = 0,j = 0,cont=0;
     char auxs[90]={}, aux[90]={};
 
     Linha *nova,*auxL;
@@ -275,6 +284,7 @@ void gerarLista(Linha **lin,Coluna **col,char NomeArq[])
         Linha *nova = (Linha *)malloc(sizeof(Linha));
         nova->prox = nova->ant = NULL;
         nova->inicio = NULL;
+        nova->linha = cont;
 
         if(*lin == NULL)
         {
@@ -292,14 +302,74 @@ void gerarLista(Linha **lin,Coluna **col,char NomeArq[])
       
 		while(i != strlen(auxs))
 	    {
-            if(auxs[i] >= 33 && auxs[i] <= 126)
+	    	// 48 a 57 numeros 65 a 90 letras maisculas 97 a 122 letras minusculas 
+	    	//33 a 47 ! " # $ % & ' ( ) * + , - . /
+	    	//58 a 64 : ; < = > ? @
+	    	//91 a 96 [ \ ] ^ _ `
+	    	//123 a 126 { | } ~
+            if((auxs[i] >= 48 && auxs[i]<= 57))
             {
                 aux[j] = auxs[i];
                 j++;
             }
-			else
+            else if((auxs[i]>= 65 && auxs[i] <= 90))
+            {
+                aux[j] = auxs[i];
+                j++;
+            }
+            else if((auxs[i] >= 97 && auxs[i]<=122))
+            {
+                aux[j] = auxs[i];
+                j++;
+            }
+            else if (auxs[i] >= 33 && auxs[i] <= 47 )
+            {
+            	if(j!= 0)
+            		listaCol(&nova->inicio,aux);
+            	for(;j>=0;j--)
+                	aux[j] = '\0';
+               	j=0;
+            	aux[j] = auxs[i];
+            	listaCol(&nova->inicio,aux);
+            	j=0;
+			}
+			else if (auxs[i] >= 58 && auxs[i] <= 64 )
+            {
+            	if(j!= 0)
+            		listaCol(&nova->inicio,aux);
+            	for(;j>=0;j--)
+                	aux[j] = '\0';
+               	j=0;
+            	aux[j] = auxs[i];
+            	listaCol(&nova->inicio,aux);
+            	j=0;
+			}
+			else if (auxs[i] >= 91 && auxs[i] <= 96 )
+            {
+            	if(j!= 0)
+            		listaCol(&nova->inicio,aux);
+            	for(;j>=0;j--)
+                	aux[j] = '\0';
+               	j=0;
+            	aux[j] = auxs[i];
+            	listaCol(&nova->inicio,aux);
+            	j=0;
+			}
+			else if (auxs[i] >= 123 && auxs[i] <= 126 )
+            {
+            	if(j!= 0)
+            		listaCol(&nova->inicio,aux);
+            	for(;j>=0;j--)
+                	aux[j] = '\0';
+               	j=0;
+            	aux[j] = auxs[i];
+            	listaCol(&nova->inicio,aux);
+            	j=0;
+			}
+			else if(auxs[i] == 32 && i < strlen(auxs))
 			{
-			 	listaCol(&nova->inicio,aux);
+				if(j>1)
+			 		listaCol(&nova->inicio,aux);
 				for(;j>=0;j--)
                 	aux[j] = '\0';
                	j=0;
@@ -313,7 +383,7 @@ void gerarLista(Linha **lin,Coluna **col,char NomeArq[])
             aux[j] = '\0';
         j=0;
         i=0;
-  
+        cont++;
         fgets(auxs,90,arq);
     }
     fclose(arq);
@@ -342,19 +412,29 @@ void exibeL(Linha *L)
 void exibeEnter(Linha *L,int pos)
 {
     int  i = 3, j = 3 , lin, col; 
+    char auxs;
     Coluna *aux;
     
+    for (lin = 3 ; lin < 30 ; lin++)
+   { // percorre caixa
+        for (col = 3 ; col < 94 ;col++)
+        {
+           linhaCol(lin, col);
+           printf(" ");
+        }
+    }
     
-	telainicial();
-    
- 
     while(L != NULL)
-    {  
+    { 
+    
+        textColor(RED, _DARKGRAY);
+        linhaCol(i,j); 
+        printf("%d ",L->linha);
         aux = L->inicio;
         if(i==pos)
 		{
         	textColor(WHITE, _CYAN);
-		    for (col = j; col < 94; col++)
+		    for (col = j+2; col < 94; col++)
 	    	{
 	            linhaCol(i,col);
 		        printf(" ");
@@ -365,9 +445,24 @@ void exibeEnter(Linha *L,int pos)
         	
         while(aux != NULL)
         {  
-           linhaCol(i,j);
-	       printf("%s",aux->palav);
-	          j = j + strlen(aux->palav)+1;
+         	  linhaCol(i,j+3);
+        
+	      		 printf("%s",aux->palav);
+	       	// 48 a 57 numeros 65 a 90 letras maisculas 97 a 122 letras minusculas 
+	    	//33 a 47 ! " # $ % & ' ( ) * + , - . /
+	    	//58 a 64 : ; < = > ? @
+	    	//91 a 96 [ \ ] ^ _ `
+	    	//123 a 126 { | } ~
+		
+	    	if(aux!=NULL)
+	    		if(strlen(aux->palav)>1 && strlen(aux->proxC->palav)!=1)
+	         		j = j + strlen(aux->palav)+1;
+	        	else
+	        	{
+						j = j + strlen(aux->palav);
+				}
+			
+	    
            aux = aux->proxC;
         
         }
@@ -375,4 +470,79 @@ void exibeEnter(Linha *L,int pos)
        	j=3;
         L = L->prox;
     }
+}
+
+//pilha
+
+int isEmpety(pilha *inicio){
+	return inicio == NULL;
+}
+
+void init(pilha **inicio){
+		*inicio = NULL;
+}
+
+void push(pilha **inicio , int aux){
+    pilha *novo = (pilha*) malloc(sizeof(pilha));
+    
+	novo->enderecos = aux;
+    novo->prox = *inicio;
+	*inicio = novo;
+
+}
+
+void pop(pilha **inicio, int *info){
+	pilha *aux = *inicio;
+	
+	if(!isEmpety(*inicio)){
+		
+		*info = (*inicio)->enderecos;
+		*inicio = (*inicio)->prox;
+		free(aux);	
+	}
+	else{
+		*info = -1;
+	}
+}
+
+int top(pilha *inicio){
+	return inicio->enderecos;
+}
+
+
+
+void exibe(pilha *inicio){
+    system("cls");
+    if(inicio == NULL){
+    	printf("PILHA: vazia");
+	}
+	else{
+		printf("PILHA:");
+	    while(inicio != NULL){
+	        printf("%d ", inicio->enderecos);
+	        inicio=inicio->prox;
+	    }
+	}
+	printf("\n");
+}
+
+int localizaMain(Linha *L)
+{
+	int i = 3;
+    Coluna *aux;
+    while(L != NULL)
+    {  
+        aux = L->inicio;
+        while(aux != NULL)
+        {  
+        
+           	if(strcmp(aux->palav,"int")==0 && strcmp(aux->proxC->palav,"main")==0)
+           		i=L->linha;
+           		
+        	aux = aux->proxC;
+        }
+     
+        L = L->prox;
+    }
+	return i;
 }
