@@ -195,7 +195,8 @@ void telaRam()
 // estruturas
 struct TpListaC
 {
-    char palav[50];
+	
+    char palav[50],token[20];
     struct TpListaC *proxC, *antC;
 };
 typedef struct TpListaC Coluna;
@@ -240,15 +241,41 @@ int isEmpetyL(Linha *inicio)
 }
 
 // nova caixa
+void excluirLista(Linha **Lin)
+{
+	Coluna *Col = (*Lin)->inicio, *aux;
+	Linha *auxC = (*Lin);
+	while((*Lin) !=NULL)
+	{
+		while(Col!=NULL)
+		{
+			aux = Col;
+			Col = Col->proxC;
+			free(aux);
+		}
+		auxC = (*Lin);
+		(*Lin) = (*Lin)->prox;
+		free(auxC);
+	}
+}
 
 
 
-
-void listaCol(Coluna **col, char aux[90])
+void listaCol(Coluna **col, char aux[])
 {
 		Coluna *auxC, *novo = (Coluna *)malloc(sizeof(Coluna));
 			    novo->proxC = novo->antC = NULL;
 			    strcpy(novo->palav, aux);
+			    
+			    if(strcmp(aux,"int")==0 || strcmp(aux,"float")==0 || strcmp(aux,"void")==0)
+			    {
+			    	strcpy(novo->token, aux);
+				}
+				else
+				{
+					strcpy(novo->token ,"vazia");
+				}
+				
 			    if(*col == NULL)
 				{
 			    	*col = novo;  
@@ -389,6 +416,107 @@ void gerarLista(Linha **lin,Coluna **col,char NomeArq[])
     fclose(arq);
 }
 
+
+
+//pilha
+
+int isEmpety(pilha *inicio){
+	return inicio == NULL;
+}
+
+void init(pilha **inicio){
+		*inicio = NULL;
+}
+
+void push(pilha **inicio , int aux){
+    pilha *novo = (pilha*) malloc(sizeof(pilha));
+    
+	novo->enderecos = aux;
+    novo->prox = *inicio;
+	*inicio = novo;
+
+}
+
+void pop(pilha **inicio, int *info){
+	pilha *aux = *inicio;
+	
+	if(!isEmpety(*inicio)){
+		
+		*info = (*inicio)->enderecos;
+		*inicio = (*inicio)->prox;
+		free(aux);	
+	}
+	else{
+		*info = -1;
+	}
+}
+
+int top(pilha *inicio){
+	return inicio->enderecos;
+}
+
+int localizaMain(Linha *L)
+{
+	int i = 3;
+    Coluna *aux;
+    while(L != NULL)
+    {  
+        aux = L->inicio;
+        while(aux != NULL)
+        {  
+        
+           	if(strcmp(aux->token,"int")==0 && strcmp(aux->proxC->palav,"main")==0)
+           		i=L->linha;
+           	
+        	aux = aux->proxC;
+        }
+     
+        L = L->prox;
+    }
+	return i;
+}
+
+int localizaFuncao(Linha *llin, char funcao[50])
+{
+	char achou=0;
+    int i;
+    Coluna *aux;
+
+	while(llin!=NULL && !achou)
+	{
+        aux = llin -> inicio;
+        while(aux!=NULL)
+        {
+            if (aux->proxC!=NULL && (strcmp(funcao,aux->token)==0))
+            {	
+                achou=1;
+            }
+            else
+                aux = aux->proxC;
+        }
+        i++;
+        llin = llin -> prox;
+	}
+	return i;
+}
+
+
+void exibe(pilha *inicio){
+    system("cls");
+    if(inicio == NULL){
+    	printf("PILHA: vazia");
+	}
+	else{
+		printf("PILHA:");
+	    while(inicio != NULL){
+	        printf("%d ", inicio->enderecos);
+	        inicio=inicio->prox;
+	    }
+	}
+	printf("\n");
+}
+
+
 void exibeL(Linha *L)
 {
     int  i = 3, j = 3; 
@@ -470,79 +598,4 @@ void exibeEnter(Linha *L,int pos)
        	j=3;
         L = L->prox;
     }
-}
-
-//pilha
-
-int isEmpety(pilha *inicio){
-	return inicio == NULL;
-}
-
-void init(pilha **inicio){
-		*inicio = NULL;
-}
-
-void push(pilha **inicio , int aux){
-    pilha *novo = (pilha*) malloc(sizeof(pilha));
-    
-	novo->enderecos = aux;
-    novo->prox = *inicio;
-	*inicio = novo;
-
-}
-
-void pop(pilha **inicio, int *info){
-	pilha *aux = *inicio;
-	
-	if(!isEmpety(*inicio)){
-		
-		*info = (*inicio)->enderecos;
-		*inicio = (*inicio)->prox;
-		free(aux);	
-	}
-	else{
-		*info = -1;
-	}
-}
-
-int top(pilha *inicio){
-	return inicio->enderecos;
-}
-
-
-
-void exibe(pilha *inicio){
-    system("cls");
-    if(inicio == NULL){
-    	printf("PILHA: vazia");
-	}
-	else{
-		printf("PILHA:");
-	    while(inicio != NULL){
-	        printf("%d ", inicio->enderecos);
-	        inicio=inicio->prox;
-	    }
-	}
-	printf("\n");
-}
-
-int localizaMain(Linha *L)
-{
-	int i = 3;
-    Coluna *aux;
-    while(L != NULL)
-    {  
-        aux = L->inicio;
-        while(aux != NULL)
-        {  
-        
-           	if(strcmp(aux->palav,"int")==0 && strcmp(aux->proxC->palav,"main")==0)
-           		i=L->linha;
-           		
-        	aux = aux->proxC;
-        }
-     
-        L = L->prox;
-    }
-	return i;
 }

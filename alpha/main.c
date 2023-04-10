@@ -7,6 +7,7 @@
 int main()
 {
     // define tamanho do prompt e o titulo do prompt
+    
     system("MODE con cols=95 lines=35");
     system("title Simulacao de programa em C");
     textColor(BLACK, _DARKGRAY);
@@ -20,12 +21,12 @@ int main()
 
     initListaC(&Col);
     initListaL(&Lin);
-
+    initListaL(&aux);
     do
     {
         fflush(stdin);
         op = getche();
-
+		
         if (op == 65)
         {
             system("cls");
@@ -75,23 +76,27 @@ int main()
                 }
                 fclose(arq);
             }
-           	gerarLista(&Lin,&Col, arqName);
+            if(Lin!=NULL)
+            	excluirLista(&Lin);
+            gerarLista(&Lin,&Col, arqName);
           
            	system("cls");
            	telainicial();
-           
+            aux = Lin;
          
            	i = localizaMain(Lin)+3;
            	exibeEnter(Lin,i);
         	flag = '0';
-            aux = Lin;
+           
             
             while(aux->prox!=NULL)
             {
-            	contlin = aux->linha;
+            	
             	aux=aux->prox;
             	
 			}
+			contlin = aux->linha + 2;
+			aux = Lin;
 			cont = i;
 		
         }
@@ -113,8 +118,19 @@ int main()
         
 				
         	cont++;
-        	exibeEnter(Lin, cont+3);
-        	
+        	printf("\n\n\n\n%s",aux->inicio->token);
+        	printf("%d",cont);
+        	if(strcmp(aux->inicio->token,"vazia")!=0)
+            {
+            	//printf("achei><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            	printf("\n%s",aux->inicio->palav);
+               	contlin = localizaFuncao(aux,aux->inicio->palav);
+               	printf("\n\n\n%d",contlin);
+                exibeEnter(Lin, contlin);
+            }
+            else	
+            	exibeEnter(Lin, cont);
+        	//aux = aux->prox;
         	
 		}
         else if(op == 13 && Lin != NULL && cont >= contlin)
